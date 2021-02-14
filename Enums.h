@@ -8,10 +8,12 @@ public:
     enum class GSTError : int{
         EOS = 1,
         APPSINK_NULL = 2,
-        PIPELINE_NULL = 3,
-        PIPELINESTR_EMPTY = 4,
-        BUFFER_NULL = 5,
-        IMAGE_NULL = 6,
+        APPSRC_NULL = 3,
+        PIPELINE_NULL = 4,
+        PIPELINESTR_EMPTY = 5,
+        BUFFER_NULL = 6,
+        IMAGE_NULL = 7,
+        PUSH_BUFFER = 8,
         UNKNOWN
     };
 };

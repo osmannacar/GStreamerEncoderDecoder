@@ -23,6 +23,7 @@ bool AEncoder::writeImage(QImage pImage)
     }
     if(!mAppsrc) {
         qDebug() << "AEncoder::writeImage appsrc is empty!!!!";
+        emit onError(Enums::GSTError::APPSRC_NULL);
         return false;
     }
     return writeRawData((char*)pImage.constBits(), pImage.sizeInBytes());
@@ -40,6 +41,7 @@ bool AEncoder::writeRawData(char *data, int len)
 
     if(result != GST_FLOW_OK) {
         qDebug() << "AEncoder::writeRawData push buffer returns: " << result << "!";
+        emit onError(Enums::GSTError::PUSH_BUFFER);
         return false;
     }
     return true;
@@ -54,6 +56,7 @@ void AEncoder::mainLoop()
     QString pipelineStr = createGSTPipeline();
     if(pipelineStr.isEmpty()){
         qDebug() << "AEncoder::mainLoop pipelineStr is empty";
+        emit onError(Enums::GSTError::PIPELINESTR_EMPTY);
         return;
     }
     qDebug() << "AEncoder::mainLoop pipelineStr: " << pipelineStr;
@@ -61,6 +64,7 @@ void AEncoder::mainLoop()
     GstElement *gstPipeline = gst_parse_launch(pipelineStr.toStdString().c_str(), nullptr);
     mAppsrc = (GstAppSrc*) gst_bin_get_by_name(GST_BIN(gstPipeline), GST_APP_SOURCE_STRING.toStdString().c_str());
     if(!mAppsrc) {
+        emit onError(Enums::GSTError::APPSRC_NULL);
         qDebug() << "AEncoder::mainLoop mAppsrc is empty!";
         return;
     }
